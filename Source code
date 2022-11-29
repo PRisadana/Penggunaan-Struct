@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+struct pelanggan{
+    char *nama;
+    char *alamat;
+    char *no_telepon;
+}; struct pelanggan identitas_pelanggan;
+
+struct reguler{
+    int biaya_beban;
+    int biaya_pemakaian;
+    int biaya_kelebihan_pemakaian_daya_reaktif;
+}; struct reguler reg;
+
+struct rekening{
+    char *gol_tarif;
+    char *batas_daya;
+    struct reguler reg;
+    char *prabayar;
+}; struct rekening rek_listrik;
+
+struct transaksi{
+    char *no_meteran;
+    char *id_pelanggan;
+    char *tanggal;
+    struct pelanggan identitas_pelanggan;
+    struct rekening rek_listrik;
+    float total_tagihan;
+}; struct transaksi bayar;
+
+int main(){
+
+    // menggunakan struct
+    struct pelanggan identitas_pelanggan;
+
+    //mengisi nilai ke struct
+    identitas_pelanggan.nama = "Nyoman";
+    identitas_pelanggan.alamat = "Gianyar";
+    identitas_pelanggan.no_telepon ="081234567890";
+
+    // mencetak struct
+    printf ("\n\t Struct pelanggan");
+    printf ("\n\tNama : %s", identitas_pelanggan.nama);
+    printf ("\n\tAlamat : %s", identitas_pelanggan.alamat);
+    printf ("\n\tNo Telepon : %s", identitas_pelanggan.no_telepon);
+
+    struct reguler reg;
+
+    reg.biaya_beban = 2000;
+    reg.biaya_pemakaian = 50000;
+    reg.biaya_kelebihan_pemakaian_daya_reaktif = 1500;
+    printf("\n");
+    printf ("\n\tStruct Reguler");
+    printf ("\n\tBiaya beban : %d", reg.biaya_beban);
+    printf ("\n\tBiaya pemakaian : %d", reg.biaya_pemakaian);
+    printf ("\n\tBiaya Kelbihan pemakaian daya reaktif : %d", reg.biaya_kelebihan_pemakaian_daya_reaktif);
+
+    struct rekening rek_listrik;
+
+    rek_listrik.gol_tarif = "R-1/TR";
+    rek_listrik.batas_daya = "900 VA";
+    rek_listrik.prabayar = "1500";
+    rek_listrik.reg.biaya_beban = reg.biaya_beban;
+
+    printf("\n");
+    printf ("\n\tStruct Rekening");
+    printf ("\n\tGol tarif: %s", rek_listrik.gol_tarif);
+    printf ("\n\tBatas daya : %s", rek_listrik.batas_daya);
+    printf ("\n\tPrabayar : %s", rek_listrik.prabayar);
+    printf ("\n\tRekening : %d", rek_listrik.reg.biaya_beban);
+}
