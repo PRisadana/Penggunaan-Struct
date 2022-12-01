@@ -3,9 +3,9 @@
 
 
 struct pelanggan{
-    char *nama;
-    char *alamat;
-    char *no_telepon;
+    char nama[50]; // berisi panjang array jika ingin menginput
+    char alamat[50];
+    int no_telepon;
 }; struct pelanggan identitas_pelanggan;
 
 struct reguler{
@@ -15,16 +15,16 @@ struct reguler{
 }; struct reguler reg;
 
 struct rekening{
-    char *gol_tarif;
+    char *gol_tarif; //tidak berisi panjang array jika tidak ingin menginput
     char *batas_daya;
     struct reguler reg;
-    char *prabayar;
+    float prabayar;
 }; struct rekening rek_listrik;
 
 struct transaksi{
-    char *no_meteran;
-    char *id_pelanggan;
-    char *tanggal;
+    char no_meteran[50];
+    char id_pelanggan[50];
+    char tanggal[50];
     struct pelanggan identitas_pelanggan;
     struct rekening rek_listrik;
     float total_tagihan;
@@ -36,38 +36,80 @@ int main(){
     struct pelanggan identitas_pelanggan;
 
     //mengisi nilai ke struct
-    identitas_pelanggan.nama = "Nyoman";
-    identitas_pelanggan.alamat = "Gianyar";
-    identitas_pelanggan.no_telepon ="081234567890";
-
-    // mencetak struct
-    printf ("\n\t Struct pelanggan");
-    printf ("\n\tNama : %s", identitas_pelanggan.nama);
-    printf ("\n\tAlamat : %s", identitas_pelanggan.alamat);
-    printf ("\n\tNo Telepon : %s", identitas_pelanggan.no_telepon);
-
+    printf("\n\t==============================================");
+    printf("\n\t||            IDENTITAS PELANGGAN           ||");
+    printf("\n\t==============================================");
+    printf("\n\tMasukkan nama : ");
+    scanf("%[^\n]%*c", &identitas_pelanggan.nama);
+    printf("\n\tMasukkan alamat : ");
+    scanf("%[^\n]%*c", &identitas_pelanggan.alamat);
+    printf("\n\tMasukkan no telepon : ");
+    scanf("%d", &identitas_pelanggan.no_telepon);
+    
     struct reguler reg;
 
-    reg.biaya_beban = 2000;
-    reg.biaya_pemakaian = 50000;
-    reg.biaya_kelebihan_pemakaian_daya_reaktif = 1500;
-    printf("\n");
-    printf ("\n\tStruct Reguler");
-    printf ("\n\tBiaya beban : %d", reg.biaya_beban);
-    printf ("\n\tBiaya pemakaian : %d", reg.biaya_pemakaian);
-    printf ("\n\tBiaya Kelbihan pemakaian daya reaktif : %d", reg.biaya_kelebihan_pemakaian_daya_reaktif);
+    printf("\n\t==============================================");
+    printf("\n\t||                 REGULER                  ||");
+    printf("\n\t==============================================");
+    printf("\n\tMasukkan Biaya Beban (Rp) : ");
+    scanf("%d", &reg.biaya_beban);
+    printf("\n\tMasukkan Biaya Pemakaian (Rp): ");
+    scanf("%d", &reg.biaya_pemakaian);
+    printf("\n\tMasukkan biaya kVArh (Rp) : ");
+    scanf("%d", &reg.biaya_kelebihan_pemakaian_daya_reaktif);
 
     struct rekening rek_listrik;
 
     rek_listrik.gol_tarif = "R-1/TR";
     rek_listrik.batas_daya = "900 VA";
-    rek_listrik.prabayar = "1500";
+    rek_listrik.prabayar = 1500;
     rek_listrik.reg.biaya_beban = reg.biaya_beban;
 
+    struct transaksi bayar;
+
+    printf("\n\t==============================================");
+    printf("\n\t||                 TRANSAKSI                ||");
+    printf("\n\t==============================================");   
+    printf("\n\tMasukkan No Meteran : ");
+    scanf("%[^\n]%*c", &bayar.no_meteran);
+    printf("\n\tMasukkan Id Pelanggan : ");
+    scanf("%[^\n]%*c", &bayar.id_pelanggan);
+    printf("\n\tMasukkan Tanggal Pembayaran : ");
+    scanf("%[^\n]%*c", &bayar.tanggal);
+    printf("\n\tMasukkan Total Tagihan Pembayaran (Rp) : ");
+    scanf("%f", &bayar.total_tagihan);
+
+    // Hasil Inputan, mencetak struct
+    printf("\n\t==============================================");
+    printf("\n\t||              STRUCT PELANGGAN            ||");
+    printf("\n\t==============================================");
+    printf ("\n\tNama : %s", identitas_pelanggan.nama);
+    printf ("\n\tAlamat : %s", identitas_pelanggan.alamat);
+    printf ("\n\tNo Telepon : %s", identitas_pelanggan.no_telepon);
+
     printf("\n");
-    printf ("\n\tStruct Rekening");
+    printf("\n\t==============================================");
+    printf("\n\t||               STRUCT REGULER             ||");
+    printf("\n\t==============================================");
+    printf ("\n\tBiaya beban : Rp.%d", reg.biaya_beban);
+    printf ("\n\tBiaya pemakaian : Rp.%d", reg.biaya_pemakaian);
+    printf ("\n\tBiaya Kelbihan pemakaian daya reaktif : Rp.%d", reg.biaya_kelebihan_pemakaian_daya_reaktif);
+
+    printf("\n");
+    printf("\n\t==============================================");
+    printf("\n\t||              STRUCT REKENING             ||");
+    printf("\n\t==============================================");    
     printf ("\n\tGol tarif: %s", rek_listrik.gol_tarif);
     printf ("\n\tBatas daya : %s", rek_listrik.batas_daya);
-    printf ("\n\tPrabayar : %s", rek_listrik.prabayar);
+    printf ("\n\tPrabayar : Rp.%s", rek_listrik.prabayar);
     printf ("\n\tRekening : %d", rek_listrik.reg.biaya_beban);
+
+    printf("\n");
+    printf("\n\t==============================================");
+    printf("\n\t||              STRUCT Transaksi            ||");
+    printf("\n\t==============================================");   
+    printf ("\n\tNo meteran: %s", bayar.no_meteran);
+    printf ("\n\tId pelanggan : %s", bayar.id_pelanggan);
+    printf ("\n\ttanggal : %s", bayar.tanggal);
+    printf ("\n\ttotal tagihan : Rp.%.0f", bayar.total_tagihan);
 }
