@@ -1,36 +1,68 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
+
+int main();
+void ulang();
+
+
+void mulai(){
+    printf("\n\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    printf("\n\t||            Algoritma dan Pemrograman            ||");
+    printf("\n\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    printf("\n\t||          Resandy Prisadana  2205551050          ||");
+    printf("\n\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    printf("\n\tTekan enter untuk melanjutkan...");
+    getchar();
+    system("clear");
+}
+
+void penutup (){
+    printf ("\n\t========================================================");
+    printf ("\n\t||    Terima kasih telah menggunakan layanan kami     ||");
+    printf ("\n\t||              Salam Hangat Dari Kami                ||");
+    printf ("\n\t========================================================");
+}
 
 struct pelanggan{
     char nama[50]; // berisi panjang array jika ingin menginput
     char alamat[50];
-    int no_telepon;
-}; struct pelanggan identitas_pelanggan;
+    char no_telepon[50];
+};
 
 struct reguler{
     int biaya_beban;
-    int biaya_pemakaian;
+    float pemakaian;
+    float daya_tersambung;
+    float biaya_pemakaian;
     int biaya_kelebihan_pemakaian_daya_reaktif;
-}; struct reguler reg;
+};
 
 struct rekening{
     char *gol_tarif; //tidak berisi panjang array jika tidak ingin menginput
     char *batas_daya;
     struct reguler reg;
     float prabayar;
-}; struct rekening rek_listrik;
+};
 
 struct transaksi{
-    char no_meteran[50];
-    char id_pelanggan[50];
-    char tanggal[50];
+    char date[50];
+    int noMeteran;
+    int id_pelanggan;
     struct pelanggan identitas_pelanggan;
     struct rekening rek_listrik;
     float total_tagihan;
-}; struct transaksi bayar;
+};
+
+void struk_transaksi(struct transaksi byr, float total); // Hanya untuk deklarasi
+void struk_pelanggan(struct pelanggan customer); // Hanya untuk deklarasi
+void struk_reguler(struct reguler rgl); // Hanya untuk deklarasi
+void struk_rekening(struct rekening rkng); // Hanya untuk deklarasi
+void cetak(struct pelanggan customer, struct reguler rgl, struct rekening rkng, struct transaksi byr, float total); // Hanya untuk deklarasi
 
 int main(){
+    mulai();
 
     // menggunakan struct
     struct pelanggan identitas_pelanggan;
@@ -40,23 +72,21 @@ int main(){
     printf("\n\t||            IDENTITAS PELANGGAN           ||");
     printf("\n\t==============================================");
     printf("\n\tMasukkan nama : ");
-    scanf("%[^\n]%*c", &identitas_pelanggan.nama);
+    fgets(identitas_pelanggan.nama, sizeof(identitas_pelanggan.nama), stdin);
     printf("\n\tMasukkan alamat : ");
-    scanf("%[^\n]%*c", &identitas_pelanggan.alamat);
+    fgets(identitas_pelanggan.alamat, sizeof(identitas_pelanggan.alamat), stdin);
     printf("\n\tMasukkan no telepon : ");
-    scanf("%d", &identitas_pelanggan.no_telepon);
-    
+    fgets(identitas_pelanggan.no_telepon, sizeof(identitas_pelanggan.no_telepon), stdin);
+
     struct reguler reg;
 
-    printf("\n\t==============================================");
-    printf("\n\t||                 REGULER                  ||");
-    printf("\n\t==============================================");
-    printf("\n\tMasukkan Biaya Beban (Rp) : ");
-    scanf("%d", &reg.biaya_beban);
-    printf("\n\tMasukkan Biaya Pemakaian (Rp): ");
-    scanf("%d", &reg.biaya_pemakaian);
-    printf("\n\tMasukkan biaya kVArh (Rp) : ");
-    scanf("%d", &reg.biaya_kelebihan_pemakaian_daya_reaktif);
+    reg.pemakaian = 200; //satuan kWh
+    reg.daya_tersambung = 0.9;
+    reg.biaya_pemakaian = 1444.7 * reg.pemakaian;
+    reg.biaya_kelebihan_pemakaian_daya_reaktif = 1500 * reg.pemakaian;
+
+    reg.biaya_beban = 40 * reg.daya_tersambung * reg.biaya_pemakaian;
+    float total = reg.biaya_beban + (reg.biaya_kelebihan_pemakaian_daya_reaktif*reg.pemakaian);
 
     struct rekening rek_listrik;
 
@@ -69,47 +99,194 @@ int main(){
 
     printf("\n\t==============================================");
     printf("\n\t||                 TRANSAKSI                ||");
-    printf("\n\t==============================================");   
+    printf("\n\t==============================================");
     printf("\n\tMasukkan No Meteran : ");
-    scanf("%[^\n]%*c", &bayar.no_meteran);
+    while(scanf("%d", &bayar.noMeteran)==0){
+        printf ("\n\tKarakter yang anda inputkan salah");
+        printf ("\n\tInputan berupa angka");
+        printf ("\n\t---------------------------------------");
+        printf("\n\tMasukkan No Meteran : ");
+        while (bayar.noMeteran=getchar() != '\n');
+    }
     printf("\n\tMasukkan Id Pelanggan : ");
-    scanf("%[^\n]%*c", &bayar.id_pelanggan);
-    printf("\n\tMasukkan Tanggal Pembayaran : ");
-    scanf("%[^\n]%*c", &bayar.tanggal);
-    printf("\n\tMasukkan Total Tagihan Pembayaran (Rp) : ");
-    scanf("%f", &bayar.total_tagihan);
+    while(scanf("%d", &bayar.id_pelanggan)==0){
+        printf ("\n\tKarakter yang anda inputkan salah");
+        printf ("\n\tInputan berupa angka");
+        printf ("\n\t---------------------------------------");
+        printf("\n\tMasukkan Id Pelanggan : ");
+        while (bayar.id_pelanggan=getchar() != '\n');
+    }
+
+    system("clear");
+
+    // panggil fungsi struct
+    struk_pelanggan(identitas_pelanggan);
+    struk_reguler(reg);
+    struk_rekening(rek_listrik);
+    struk_transaksi(bayar, total);
+
+    getchar();
+    printf("\n\n\n\tTekan enter untuk melanjutkan...");
+    getchar();
+    system("clear");
+
+    int print;
+        printf("\n\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        printf("\n\t||  Apakah anda ingin mencetak bukti pembayaran ?  ||");
+        printf("\n\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        printf("\n\t|| (1) Iyaa                                        ||");
+        printf("\n\t|| (2) Tidak                                       ||");
+        printf("\n\t~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        printf("\n\tMasukkan pilihan anda : ");
+        while (scanf  ("%d", &print)==0 || print<0 || print>2){
+        printf ("\n\tKarakter yang anda inputkan salah");
+        printf ("\n\tSilahkan inputkan ulang");
+        printf ("\n\t---------------------------------------");
+        printf("\n\tMasukkan pilihan anda : ");
+        while (print=getchar() != '\n');
+    }
+        if (print==1){
+           cetak(identitas_pelanggan,reg, rek_listrik,bayar, total);
+        }else if(print==2){
+            getchar();
+            printf("\n\tTekan enter untuk melanjutkan...");
+            getchar();
+            system("clear");
+            ulang();
+        }
+
+}
+
 
     // Hasil Inputan, mencetak struct
+void struk_pelanggan(struct pelanggan customer){
     printf("\n\t==============================================");
     printf("\n\t||              STRUCT PELANGGAN            ||");
     printf("\n\t==============================================");
-    printf ("\n\tNama : %s", identitas_pelanggan.nama);
-    printf ("\n\tAlamat : %s", identitas_pelanggan.alamat);
-    printf ("\n\tNo Telepon : %s", identitas_pelanggan.no_telepon);
+    printf("\n\tNama : %s", customer.nama);
+    printf("\n\tAlamat : %s", customer.alamat);
+    printf("\n\tNo Telepon : %s", customer.no_telepon);
+}
 
+void struk_reguler(struct reguler rgl){
     printf("\n");
     printf("\n\t==============================================");
     printf("\n\t||               STRUCT REGULER             ||");
     printf("\n\t==============================================");
-    printf ("\n\tBiaya beban : Rp.%d", reg.biaya_beban);
-    printf ("\n\tBiaya pemakaian : Rp.%d", reg.biaya_pemakaian);
-    printf ("\n\tBiaya Kelbihan pemakaian daya reaktif : Rp.%d", reg.biaya_kelebihan_pemakaian_daya_reaktif);
+    printf ("\n\tBiaya beban : Rp.%d", rgl.biaya_beban);
+    printf ("\n\tBiaya pemakaian : Rp.%.0f", rgl.biaya_pemakaian);
+    printf ("\n\tBiaya Kelbihan pemakaian daya reaktif : Rp.%d", rgl.biaya_kelebihan_pemakaian_daya_reaktif);
+}
 
+ void struk_rekening(struct rekening rkng){
     printf("\n");
     printf("\n\t==============================================");
     printf("\n\t||              STRUCT REKENING             ||");
-    printf("\n\t==============================================");    
-    printf ("\n\tGol tarif: %s", rek_listrik.gol_tarif);
-    printf ("\n\tBatas daya : %s", rek_listrik.batas_daya);
-    printf ("\n\tPrabayar : Rp.%s", rek_listrik.prabayar);
-    printf ("\n\tRekening : %d", rek_listrik.reg.biaya_beban);
+    printf("\n\t==============================================");
+    printf ("\n\tGol tarif: %s", rkng.gol_tarif);
+    printf ("\n\tBatas daya : %s", rkng.batas_daya);
+    printf ("\n\tPrabayar : Rp.%.0f", rkng.prabayar);
+    printf ("\n\tRekening : Rp.%d", rkng.reg.biaya_beban);
+}
+
+void struk_transaksi(struct transaksi byr, float total){
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
 
     printf("\n");
     printf("\n\t==============================================");
     printf("\n\t||              STRUCT Transaksi            ||");
-    printf("\n\t==============================================");   
-    printf ("\n\tNo meteran: %s", bayar.no_meteran);
-    printf ("\n\tId pelanggan : %s", bayar.id_pelanggan);
-    printf ("\n\ttanggal : %s", bayar.tanggal);
-    printf ("\n\ttotal tagihan : Rp.%.0f", bayar.total_tagihan);
+    printf("\n\t==============================================");
+    printf ("\n\tNo meteran: %d", byr.noMeteran);
+    printf ("\n\tId pelanggan : %d", byr.id_pelanggan);
+    printf ("\n\ttanggal pembayaran : %d-%02d-%02d %02d:%02d:%02d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+    printf ("\n\ttotal tagihan : Rp.%.0f", total);
+}
+
+void cetak(struct pelanggan customer, struct reguler rgl, struct rekening rkng, struct transaksi byr, float total){
+    //menulis file ke txt
+    //membuat pointer
+    FILE *fptr;
+
+    //membuka file
+    fptr = fopen("penggunaanstruct.txt", "w");
+
+    if (fptr==NULL){
+        printf ("\n\tFile tidak ditemukan");
+        exit(0);
+    }
+
+        fprintf(fptr, "\n\t==============================================");
+        fprintf(fptr, "\n\t||              STRUCT PELANGGAN            ||");
+        fprintf(fptr, "\n\t==============================================");
+        fprintf(fptr, "\n\tNama : %s", customer.nama);
+        fprintf(fptr,"\n\tAlamat : %s", customer.alamat);
+        fprintf(fptr,"\n\tNo Telepon : %s", customer.no_telepon);
+
+        fprintf(fptr,"\n");
+        fprintf(fptr,"\n\t==============================================");
+        fprintf(fptr,"\n\t||               STRUCT REGULER             ||");
+        fprintf(fptr,"\n\t==============================================");
+        fprintf(fptr,"\n\tBiaya beban : Rp.%d", rgl.biaya_beban);
+        fprintf(fptr,"\n\tBiaya pemakaian : Rp.%.0f", rgl.biaya_pemakaian);
+        fprintf(fptr,"\n\tBiaya Kelbihan pemakaian daya reaktif : Rp.%d", rgl.biaya_kelebihan_pemakaian_daya_reaktif);
+
+        fprintf(fptr,"\n");
+        fprintf(fptr,"\n\t==============================================");
+        fprintf(fptr,"\n\t||              STRUCT REKENING             ||");
+        fprintf(fptr,"\n\t==============================================");
+        fprintf(fptr,"\n\tGol tarif: %s", rkng.gol_tarif);
+        fprintf(fptr,"\n\tBatas daya : %s", rkng.batas_daya);
+        fprintf(fptr,"\n\tPrabayar : Rp.%.0f", rkng.prabayar);
+        fprintf(fptr,"\n\tRekening : Rp.%d", rkng.reg.biaya_beban);
+
+
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+
+        fprintf(fptr,"\n");
+        fprintf(fptr,"\n\t==============================================");
+        fprintf(fptr,"\n\t||              STRUCT Transaksi            ||");
+        fprintf(fptr,"\n\t==============================================");
+        fprintf(fptr,"\n\tNo meteran: %d", byr.noMeteran);
+        fprintf(fptr,"\n\tId pelanggan : %d", byr.id_pelanggan);
+        fprintf(fptr,"\n\ttanggal pembayaran : %d-%02d-%02d %02d:%02d:%02d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900, tm.tm_hour, tm.tm_min, tm.tm_sec);
+
+
+        fclose(fptr);//tutup file
+
+        printf("\n\tStruktur telah berhasil dicetak!!!\n");
+        ulang();
+}
+
+void ulang(){
+    int menu;
+    printf ("\n\t========================================================");
+    printf ("\n\t||        Apakah anda ingin mengulang program         ||");
+    printf ("\n\t========================================================");
+    printf ("\n\t(1) Ya, saya ingin menghitung kembali                   ");
+    printf ("\n\t(2) Tidak, sudah selesai                                ");
+    printf ("\n\t========================================================");
+    printf ("\n\tMasukkan angka untuk memilih  :  ");
+    while (scanf  ("%d", &menu)==0 || menu<1 || menu>2){
+        printf ("\n\tKarakter yang anda inputkan salah");
+        printf ("\n\tSilahkan inputkan ulang");
+        printf ("\n\t---------------------------------------");
+        printf ("\n\tMasukkan angka untuk memilih   : ");
+        while (menu=getchar() != '\n');
+    }
+
+    if (menu==1){
+        getchar();
+        printf("\n\tTekan enter untuk melanjutkan...");
+        getchar();
+        system("clear");
+        main();
+    }else if (menu==2){
+        getchar();
+        printf("\n\tTekan enter untuk melanjutkan...");
+        getchar();
+        system("clear");
+        penutup();
+    }
 }
